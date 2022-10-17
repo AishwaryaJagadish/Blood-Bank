@@ -3,6 +3,8 @@ package com.example.donor.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.ConstraintViolationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class Controller {
 	
 	@Autowired
 	private Repo repo;
-	//private MongoTemplate mongoTemplate;
+	
 	Logger logger = LoggerFactory.getLogger(DonorApplication.class);
 	
 	@PostMapping("/donors")
@@ -62,13 +64,17 @@ public class Controller {
 			Optional<Donor> donoroptional = repo.findById(id);
 			if(donoroptional.isPresent()) {
 			  Donor newobj = donoroptional.get();
+			  if(donor.getName()!=null)
 			  newobj.setName(donor.getName());
+			  if(donor.getAge()!=0)
 			  newobj.setAge(donor.getAge());
+			  if(donor.getGender()!=null)
 			  newobj.setGender(donor.getGender());
+			  if(donor.getBloodgroup()!=null)
 			  newobj.setBloodgroup(donor.getBloodgroup());
+			  if(donor.getPhone()!=null)
 			  newobj.setPhone(donor.getPhone());
-			  repo.deleteById(id);
-			  repo.save(donor);
+			  repo.save(newobj);
 			  return new ResponseEntity<>("Updated the donor in database",HttpStatus.OK);
 			}
 			else
@@ -125,11 +131,27 @@ public class Controller {
 	  }
 	}
 	
-//	@GetMapping("/donors/{bloodgroup}")
-//	List<Donor> findAll(@PathVariable(value="bloodgroup")String bloodgroup){
-//		Query query = new Query();
-//		query.addCriteria(Criteria.where("bloodgroup").is(bloodgroup));
-//		return mongoTemplate.find(query,Donor.class);
-//	}
+	@GetMapping("/donors/blood/{bloodgroup}")
+	public List<Donor> findDonor(@PathVariable(value="bloodgroup") String bloodgroup){
+		List<Donor> bloodgroupres = repo.findByBloodgroup(bloodgroup);
+		return bloodgroupres;
+		
+	}
+	
+	@GetMapping("/donors/age/{age}")
+	public ResponseEntity<?> findAge(@PathVariable(value="age") int age){
+		List<Donor> ageres = repo.findByAge(age);
+		if(ageres.size()>0)
+		{
+			return new ResponseEntity<List<Donor>>(ageres,HttpStatus.OK);
+		}
+		else
+		{
+			return new ResponseEntity<>("Age not present", HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	
 	
 }

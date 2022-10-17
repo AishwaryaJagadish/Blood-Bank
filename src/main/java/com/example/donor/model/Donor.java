@@ -1,5 +1,7 @@
 package com.example.donor.model;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,14 +11,17 @@ public class Donor {
 	@Id
 	private String id;
 	
+	@NotNull(message = "Name cannot be null")
 	private String  name;
 	
 	private int age;
 	
 	private String gender;
 	
+	@NotNull(message = "BloodGroup cannot be null")
 	private String bloodgroup;
 	
+	@NotNull(message = "Phone Number cannot be null")
 	private String phone;
 
 	public String getId() {
