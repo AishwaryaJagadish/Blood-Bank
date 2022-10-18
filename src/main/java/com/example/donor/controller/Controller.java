@@ -35,28 +35,32 @@ public class Controller {
 	
 	@PostMapping("/donors")
 	public ResponseEntity<?> createDonor(@RequestBody Donor donor){
-		try {
 			repo.save(donor);
 			return new ResponseEntity<Donor>(donor,HttpStatus.OK);
-		}
-		catch(Exception e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-		}
 	}	
+//	try {
+//		repo.save(donor);
+//		return new ResponseEntity<Donor>(donor,HttpStatus.OK);
+//	}
+//	catch(Exception e) {
+//		logger.error(e.getMessage());
+//		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+//	}
 	
 	@GetMapping("/donors")
 	public ResponseEntity<?> showDonor(){
-		try {
 			List<Donor> gdonors = repo.findAll();
 			return new ResponseEntity<List<Donor>>(gdonors,HttpStatus.OK);
-		}
-		catch(Exception e)
-		{
-			logger.error(e.getMessage());
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
-		}
 	}
+//	try {
+//		List<Donor> gdonors = repo.findAll();
+//		return new ResponseEntity<List<Donor>>(gdonors,HttpStatus.OK);
+//	}
+//	catch(Exception e)
+//	{
+//		logger.error(e.getMessage());
+//		return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+//	}
 	
 	@PutMapping("/donors/{id}")
 	public ResponseEntity<?> updateDonor(@RequestBody Donor donor,@PathVariable String id){
@@ -74,6 +78,8 @@ public class Controller {
 			  newobj.setBloodgroup(donor.getBloodgroup());
 			  if(donor.getPhone()!=null)
 			  newobj.setPhone(donor.getPhone());
+			  if(donor.getEmail()!=null)
+			  newobj.setEmail(donor.getEmail());
 			  repo.save(newobj);
 			  return new ResponseEntity<>("Updated the donor in database",HttpStatus.OK);
 			}

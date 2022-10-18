@@ -19,3 +19,5 @@ public class ValidationConfig {
 	}	
 
 }
+
+//before sending the data to the database, it comes here to check for the constraints like null and notnull defined in the model classss

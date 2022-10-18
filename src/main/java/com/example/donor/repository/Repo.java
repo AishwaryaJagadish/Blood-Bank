@@ -17,3 +17,6 @@ public interface Repo extends MongoRepository<Donor,String>{  //model class name
 	@Query("{'age': ?0}")
 	List<Donor> findByAge(int age);
 }
+
+//blue is the main query
+//this where the function gets called and it is predefined
