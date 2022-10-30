@@ -20,7 +20,7 @@ public class SequenceGenerator {
     private MongoOperations mongoOperations;
 
     public int getSequenceNum(String sequenceName){
-        Query query = new Query(Criteria.where("_id").is(sequenceName));
+        Query query = new Query(Criteria.where("_id").is(sequenceName));   //select that tuple
 //        Update update = new Update().inc("seq", 1)
         DBSequence counter = mongoOperations.findAndModify(query,
                 new Update().inc("seq",1), options().returnNew(true).upsert(true),

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.donor.DonorApplication;
 import com.example.donor.model.Donor;
 import com.example.donor.repository.Repo;
+import com.example.donor.service.SequenceGenerator;
 
 @RestController
 public class Controller {
@@ -31,10 +32,14 @@ public class Controller {
 	@Autowired
 	private Repo repo;
 	
+	@Autowired
+	private SequenceGenerator seqservice;
+	
 	Logger logger = LoggerFactory.getLogger(DonorApplication.class);
 	
 	@PostMapping("/donors")
 	public ResponseEntity<?> createDonor(@RequestBody Donor donor){
+		donor.setId("DSCE_"+String.valueOf(seqservice.getSequenceNum(Donor.SEQUENCE_NAME)));
 			repo.save(donor);
 			return new ResponseEntity<Donor>(donor,HttpStatus.OK);
 	}	
