@@ -1,10 +1,14 @@
 package com.example.donor.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Donor {
+	
+	@Transient
+	public static final String SEQUENCE_NAME = "user_sequence";
 	
 	@Id
 	private String id;
