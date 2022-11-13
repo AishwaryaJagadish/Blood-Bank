@@ -1,6 +1,8 @@
 package com.example.donor.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.ConstraintViolationException;
@@ -20,9 +22,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.donor.DonorApplication;
 import com.example.donor.model.Donor;
+import com.example.donor.model.Hospital;
+import com.example.donor.model.OutputModel;
 import com.example.donor.repository.Repo;
 import com.example.donor.service.SequenceGenerator;
 
@@ -162,6 +167,28 @@ public class Controller {
 		}
 		
 	}
+	
+	@GetMapping("/donors/hospital/{id}")
+    public OutputModel getOutput(@PathVariable String id) {
+		Donor donor = repo.findById(id).get();
+        String uri = "http://localhost:8061/hosp/{hid}";
+        Map<String,Integer> uriparam = new HashMap<>();
+        uriparam.put("hid", donor.getHid());
+        RestTemplate restTemplate = new RestTemplate();
+        Hospital res = restTemplate.getForObject(uri,Hospital.class, uriparam );
+        logger.info(res.toString());
+        OutputModel om = new OutputModel();
+        om.setId(donor.getId());
+        om.setName(donor.getName());
+        om.setAge(donor.getAge());
+        om.setBloodgroup(donor.getBloodgroup());
+        om.setEmail(donor.getEmail());
+        om.setGender(donor.getGender());
+        om.setPhone(donor.getPhone());
+        om.setHid(donor.getHid());
+        om.setHosName(res.getHosName());
+        return om;
+    }
 	
 	
 	
