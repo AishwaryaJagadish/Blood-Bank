@@ -29,6 +29,7 @@ import com.example.donor.model.Donor;
 import com.example.donor.model.Hospital;
 import com.example.donor.model.OutputModel;
 import com.example.donor.repository.Repo;
+import com.example.donor.service.DonorService;
 import com.example.donor.service.SequenceGenerator;
 
 @RestController
@@ -40,12 +41,14 @@ public class Controller {
 	@Autowired
 	private SequenceGenerator seqservice;
 	
+	@Autowired
+	private DonorService donorService;
+	
 	Logger logger = LoggerFactory.getLogger(DonorApplication.class);
 	
 	@PostMapping("/donors")
 	public ResponseEntity<?> createDonor(@RequestBody Donor donor){
-		donor.setId("DSCE_"+String.valueOf(seqservice.getSequenceNum(Donor.SEQUENCE_NAME)));
-			repo.save(donor);
+		donorService.createDonor(donor);
 			return new ResponseEntity<Donor>(donor,HttpStatus.OK);
 	}	
 //	try {
@@ -59,8 +62,7 @@ public class Controller {
 	
 	@GetMapping("/donors")
 	public ResponseEntity<?> showDonor(){
-			List<Donor> gdonors = repo.findAll();
-			return new ResponseEntity<List<Donor>>(gdonors,HttpStatus.OK);
+			return new ResponseEntity<List<Donor>>(donorService.getAll(),HttpStatus.OK);
 	}
 //	try {
 //		List<Donor> gdonors = repo.findAll();
