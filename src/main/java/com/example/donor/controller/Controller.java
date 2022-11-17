@@ -10,6 +10,8 @@ import javax.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -29,9 +31,11 @@ import com.example.donor.model.Donor;
 import com.example.donor.model.Hospital;
 import com.example.donor.model.OutputModel;
 import com.example.donor.repository.Repo;
+import com.example.donor.service.DonorService;
 import com.example.donor.service.SequenceGenerator;
 
 @RestController
+@EnableCaching
 public class Controller {
 	
 	@Autowired
@@ -40,12 +44,14 @@ public class Controller {
 	@Autowired
 	private SequenceGenerator seqservice;
 	
+	@Autowired
+	private DonorService donorService;
+	
 	Logger logger = LoggerFactory.getLogger(DonorApplication.class);
 	
 	@PostMapping("/donors")
 	public ResponseEntity<?> createDonor(@RequestBody Donor donor){
-		donor.setId("DSCE_"+String.valueOf(seqservice.getSequenceNum(Donor.SEQUENCE_NAME)));
-			repo.save(donor);
+		donorService.createDonor(donor);
 			return new ResponseEntity<Donor>(donor,HttpStatus.OK);
 	}	
 //	try {
@@ -59,8 +65,7 @@ public class Controller {
 	
 	@GetMapping("/donors")
 	public ResponseEntity<?> showDonor(){
-			List<Donor> gdonors = repo.findAll();
-			return new ResponseEntity<List<Donor>>(gdonors,HttpStatus.OK);
+			return new ResponseEntity<List<Donor>>(donorService.getAll(),HttpStatus.OK);
 	}
 //	try {
 //		List<Donor> gdonors = repo.findAll();
@@ -74,77 +79,18 @@ public class Controller {
 	
 	@PutMapping("/donors/{id}")
 	public ResponseEntity<?> updateDonor(@RequestBody Donor donor,@PathVariable String id){
-		try {
-			Optional<Donor> donoroptional = repo.findById(id);
-			if(donoroptional.isPresent()) {
-			  Donor newobj = donoroptional.get();
-			  if(donor.getName()!=null)
-			  newobj.setName(donor.getName());
-			  if(donor.getAge()!=0)
-			  newobj.setAge(donor.getAge());
-			  if(donor.getGender()!=null)
-			  newobj.setGender(donor.getGender());
-			  if(donor.getBloodgroup()!=null)
-			  newobj.setBloodgroup(donor.getBloodgroup());
-			  if(donor.getPhone()!=null)
-			  newobj.setPhone(donor.getPhone());
-			  if(donor.getEmail()!=null)
-			  newobj.setEmail(donor.getEmail());
-			  repo.save(newobj);
-			  return new ResponseEntity<>("Updated the donor in database",HttpStatus.OK);
-			}
-			else
-			{
-				logger.error("Donor not found in the database");
-				return new ResponseEntity<>("Donor not found in the database",HttpStatus.NOT_FOUND);
-			}
-		}
-		catch(Exception e)
-		{
-			logger.error(e.getMessage());
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-		}
+		return new ResponseEntity<>(donorService.updateDonor(donor,id),HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/donors/{id}")
 	public ResponseEntity<?> deleteDonor(@PathVariable String id){
-		try {
-			Optional<Donor> donoroptional = repo.findById(id);
-			if(donoroptional.isPresent()) {
-			  repo.deleteById(id);
-			  return new ResponseEntity<>("Deleted the donor from the database",HttpStatus.OK);
-			}
-			else
-			{
-				logger.error("Donor not found in the database");
-				return new ResponseEntity<>("Donor not found in the database",HttpStatus.NOT_FOUND);
-			}
-			
-		}
-		catch(Exception e) {
-			logger.error(e.getMessage());
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-		}
+		return new ResponseEntity<>(donorService.deleteDonor(id),HttpStatus.OK);
 	}
 	
+	
 	@GetMapping("/donors/{id}")
-	public ResponseEntity<?> getSingleDonor(@PathVariable String id)
-	{
-		try {
-		Optional<Donor> donoroptional = repo.findById(id);
-		if(donoroptional.isPresent()) {
-			return new ResponseEntity<Donor>(donoroptional.get(),HttpStatus.OK);
-		}
-		else
-		{
-			logger.error("Donor not found in the database");
-			return new ResponseEntity<>("Donor not found in the database",HttpStatus.NOT_FOUND);
-		}
-	  }
-	catch(Exception e) {
-		logger.error(e.getMessage());
-		return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
-	  }
+	public ResponseEntity<?> getSingleDonor(@PathVariable String id) throws Exception{
+		return new ResponseEntity<Donor>(donorService.getSingleDonor(id),HttpStatus.OK);
 	}
 	
 	@GetMapping("/donors/blood/{bloodgroup}")
@@ -170,26 +116,6 @@ public class Controller {
 	
 	@GetMapping("/donors/hospital/{id}")
     public OutputModel getOutput(@PathVariable String id) {
-		Donor donor = repo.findById(id).get();
-        String uri = "http://localhost:8061/hosp/{hid}";
-        Map<String,Integer> uriparam = new HashMap<>();
-        uriparam.put("hid", donor.getHid());
-        RestTemplate restTemplate = new RestTemplate();
-        Hospital res = restTemplate.getForObject(uri,Hospital.class, uriparam );
-        logger.info(res.toString());
-        OutputModel om = new OutputModel();
-        om.setId(donor.getId());
-        om.setName(donor.getName());
-        om.setAge(donor.getAge());
-        om.setBloodgroup(donor.getBloodgroup());
-        om.setEmail(donor.getEmail());
-        om.setGender(donor.getGender());
-        om.setPhone(donor.getPhone());
-        om.setHid(donor.getHid());
-        om.setHosName(res.getHosName());
-        return om;
+        return donorService.getOutput(id);
     }
-	
-	
-	
 }

@@ -1,5 +1,7 @@
 package com.example.donor.model;
 
+import java.io.Serializable;
+
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -10,7 +12,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Donor {
+public class Donor implements Serializable {
 	
 	@Transient
 	public static final String SEQUENCE_NAME = "user_sequence";
