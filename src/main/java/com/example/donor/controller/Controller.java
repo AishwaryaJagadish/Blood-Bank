@@ -10,6 +10,8 @@ import javax.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -33,6 +35,7 @@ import com.example.donor.service.DonorService;
 import com.example.donor.service.SequenceGenerator;
 
 @RestController
+@EnableCaching
 public class Controller {
 	
 	@Autowired
@@ -84,9 +87,10 @@ public class Controller {
 		return new ResponseEntity<>(donorService.deleteDonor(id),HttpStatus.OK);
 	}
 	
+	
 	@GetMapping("/donors/{id}")
-	public ResponseEntity<?> getSingleDonor(@PathVariable String id){
-		return new ResponseEntity<>(donorService.getSingleDonor(id),HttpStatus.OK);
+	public ResponseEntity<?> getSingleDonor(@PathVariable String id) throws Exception{
+		return new ResponseEntity<Donor>(donorService.getSingleDonor(id),HttpStatus.OK);
 	}
 	
 	@GetMapping("/donors/blood/{bloodgroup}")

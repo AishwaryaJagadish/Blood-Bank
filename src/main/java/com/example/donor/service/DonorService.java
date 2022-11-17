@@ -18,7 +18,7 @@ public interface DonorService {
 	
 	public ResponseEntity<?> deleteDonor(String id);
 	
-	public ResponseEntity<?> getSingleDonor(String id);
+	public Donor getSingleDonor(String id) throws Exception;
 	
 	public OutputModel getOutput(String id);
 	

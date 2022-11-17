@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -99,22 +100,27 @@ public class DonorServiceImpl implements DonorService {
 	}
 
 	@Override
-	public ResponseEntity<?> getSingleDonor(String id) {
+	@Cacheable(key="#id",value="Donor")
+	public Donor getSingleDonor(String id) throws Exception {
 		try {
 			Optional<Donor> donoroptional = repo.findById(id);
 			if(donoroptional.isPresent()) {
-				return new ResponseEntity<Donor>(donoroptional.get(),HttpStatus.OK);
+				System.out.println("Database");
+//				return new ResponseEntity<Donor>(donoroptional.get(),HttpStatus.OK);
+				return donoroptional.get();
 			}
 			else
 			{
 				logger.error("Donor not found in the database");
-				return new ResponseEntity<>("Donor not found in the database",HttpStatus.NOT_FOUND);
+//				return new ResponseEntity<>("Donor not found in the database",HttpStatus.NOT_FOUND);
+				throw new Exception("Donor not found in the database");
 			}
 		  }
 		catch(Exception e) {
 			logger.error(e.getMessage());
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+			throw new Exception(e.getMessage());
 		  }
+		
 	}
 
 	@Override
