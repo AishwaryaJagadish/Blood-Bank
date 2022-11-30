@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="doctor" />
+        <module name="donor" />
+        <module name="hospital" />
+        <module name="patient" />
+        <module name="email-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="doctor" target="17" />
+      <module name="donor" target="17" />
+      <module name="email-service" target="17" />
+      <module name="hospital" target="17" />
+      <module name="patient" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="doctor" options="-parameters" />
+      <module name="donor" options="-parameters" />
+      <module name="email-service" options="-parameters" />
+      <module name="hospital" options="-parameters" />
+      <module name="patient" options="-parameters" />
+    </option>
+  </component>
+</project>
