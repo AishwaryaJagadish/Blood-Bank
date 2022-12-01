@@ -55,8 +55,8 @@ public class PatientServiceImpl implements PatientService {
 			  newobj.setAge(patient.getAge());
 			  if(patient.getGender()!=null)
 			  newobj.setGender(patient.getGender());
-			  if(patient.getBloodGroup()!=null)
-			  newobj.setBloodGroup(patient.getBloodGroup());
+			  if(patient.getBloodgroup()!=null)
+			  newobj.setBloodgroup(patient.getBloodgroup());
 			  if(patient.getPhone()!=null)
 			  newobj.setPhone(patient.getPhone());
 			  if(patient.getEmail()!=null)
@@ -137,7 +137,7 @@ public class PatientServiceImpl implements PatientService {
         om.setId(patient.getId());
         om.setName(patient.getName());
         om.setAge(patient.getAge());
-        om.setBloodgroup(patient.getBloodGroup());
+        om.setBloodgroup(patient.getBloodgroup());
         om.setEmail(patient.getEmail());
         om.setGender(patient.getGender());
         om.setPhone(patient.getPhone());

@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="doctor" />
+        <module name="elastic-service" />
         <module name="donor" />
         <module name="hospital" />
         <module name="patient" />
@@ -17,6 +18,7 @@
     <bytecodeTargetLevel>
       <module name="doctor" target="17" />
       <module name="donor" target="17" />
+      <module name="elastic-service" target="17" />
       <module name="email-service" target="17" />
       <module name="hospital" target="17" />
       <module name="patient" target="17" />
@@ -26,6 +28,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="doctor" options="-parameters" />
       <module name="donor" options="-parameters" />
+      <module name="elastic-service" options="-parameters" />
       <module name="email-service" options="-parameters" />
       <module name="hospital" options="-parameters" />
       <module name="patient" options="-parameters" />

@@ -9,8 +9,8 @@ import java.util.List;
 public interface Repo extends MongoRepository<Doctor,String>{  //model class name,data type of id
 
 	
-	@Query("{'bloodgroup': ?0}")
-	List<Doctor> findByBloodgroup(String bloodgroup);
+	@Query("{'specialization': ?0}")
+	List<Doctor> findBySpecialization(String specialization);
 	
 	@Query("{'age': ?0}")
 	List<Doctor> findByAge(int age);

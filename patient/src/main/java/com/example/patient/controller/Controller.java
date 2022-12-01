@@ -1,7 +1,9 @@
 package com.example.patient.controller;
 
+import com.example.patient.kafka.PatientProducer;
 import com.example.patient.model.OutputModel;
 import com.example.patient.model.Patient;
+import com.example.patient.model.PatientOutputModel;
 import com.example.patient.repository.Repo;
 import com.example.patient.service.PatientService;
 import com.example.patient.service.SequenceGenerator;
@@ -12,6 +14,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -27,15 +30,29 @@ public class Controller {
 	
 	@Autowired
 	private PatientService patientService;
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Autowired
+	private PatientProducer producer;
 	
 	Logger logger = LoggerFactory.getLogger(Controller.class);
 	
 	@PostMapping("/patients")
 	public ResponseEntity<?> createpatient(@RequestBody Patient patient){
 		patientService.createPatient(patient);
-		
-			return new ResponseEntity<Patient>(patient,HttpStatus.OK);
-	}	
+		return new ResponseEntity<Patient>(patient,HttpStatus.OK);
+	}
+
+	@PostMapping("/patients/register")
+	public ResponseEntity<?> createpatienthospital(@RequestBody Patient patient){
+		patientService.createPatient(patient);
+		producer.sendMessage(patient);
+		String resourceUrl = "http://localhost:8063/hosp/createpatient";
+		PatientOutputModel response = restTemplate.postForObject(resourceUrl, patient, PatientOutputModel.class);
+		return new ResponseEntity<PatientOutputModel>(response,HttpStatus.OK);
+	}
 //	try {
 //		repo.save(patient);
 //		return new ResponseEntity<patient>(patient,HttpStatus.OK);

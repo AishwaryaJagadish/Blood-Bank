@@ -75,10 +75,10 @@ public class Controller {
 		return new ResponseEntity<Doctor>(doctorService.getSingleDoctor(id),HttpStatus.OK);
 	}
 	
-	@GetMapping("/doctors/blood/{bloodgroup}")
-	public List<Doctor> finddoctor(@PathVariable(value="bloodgroup") String bloodgroup){
-		List<Doctor> bloodgroupres = repo.findByBloodgroup(bloodgroup);
-		return bloodgroupres;
+	@GetMapping("/doctors/specialization/{specialization}")
+	public List<Doctor> finddoctor(@PathVariable(value="specialization") String specialization){
+		List<Doctor> doctors = repo.findBySpecialization(specialization);
+		return doctors;
 		
 	}
 	

@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/EndtoEnd_BloodBank.iml" filepath="$PROJECT_DIR$/.idea/EndtoEnd_BloodBank.iml" />
       <module fileurl="file://$PROJECT_DIR$/doctor/doctor.iml" filepath="$PROJECT_DIR$/doctor/doctor.iml" />
       <module fileurl="file://$PROJECT_DIR$/BloodBank/Blood-Bank/donor.iml" filepath="$PROJECT_DIR$/BloodBank/Blood-Bank/donor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/elastic-service/elastic-service.iml" filepath="$PROJECT_DIR$/elastic-service/elastic-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/email-service/email-service/email-service.iml" filepath="$PROJECT_DIR$/email-service/email-service/email-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/hospital/Blood-Bank/hospital.iml" filepath="$PROJECT_DIR$/hospital/Blood-Bank/hospital.iml" />
       <module fileurl="file://$PROJECT_DIR$/patient/patient.iml" filepath="$PROJECT_DIR$/patient/patient.iml" />
